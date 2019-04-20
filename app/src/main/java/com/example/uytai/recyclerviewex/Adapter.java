@@ -53,13 +53,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             super(itemView);
             txtName = itemView.findViewById(R.id.txt_item);
             image = itemView.findViewById(R.id.img_item);
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    RemoveItem(getAdapterPosition());
-                    return true;
-                }
-            });
         }
 
     }
