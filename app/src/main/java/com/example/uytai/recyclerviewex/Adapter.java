@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     ArrayList<Data> data;
     Context context;
+    private static ClickListener clickListener;
 
     public Adapter(ArrayList<Data> data, Context context) {
         this.data = data;
@@ -46,14 +47,36 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         return data.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         TextView txtName;
         ImageView image;
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             txtName = itemView.findViewById(R.id.txt_item);
             image = itemView.findViewById(R.id.img_item);
         }
 
+        @Override
+        public void onClick(View view) {
+            clickListener.onItemClick(getAdapterPosition(), view);
+        }
+
+
+        @Override
+        public boolean onLongClick(View view) {
+            clickListener.onItemLongClick(getAdapterPosition(), view);
+            return false;
+        }
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        Adapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
     }
 }

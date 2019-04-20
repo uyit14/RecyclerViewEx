@@ -9,6 +9,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         dividerItemDecoration.setDrawable(drawable);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        ArrayList<Data> arrayList = new ArrayList<>();
+        final ArrayList<Data> arrayList = new ArrayList<>();
         arrayList.add(new Data(R.drawable.a52017,"SamSung Galaxy A5 2017"));
         arrayList.add(new Data(R.drawable.a72017,"SamSung Galaxy A7 2017"));
         arrayList.add(new Data(R.drawable.iphone6splus,"Iphone 6s Plus"));
@@ -43,5 +46,17 @@ public class MainActivity extends AppCompatActivity {
         arrayList.add(new Data(R.drawable.s8plus,"SamSung Galaxy S8 Plus"));
         Adapter adapter = new Adapter(arrayList, getApplicationContext());
         recyclerView.setAdapter(adapter);
+        //set CLick
+        adapter.setOnItemClickListener(new Adapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.d("uytai", arrayList.get(position).getName());
+            }
+
+            @Override
+            public void onItemLongClick(int position, View v) {
+                Log.d("uytai", arrayList.get(position).getName());
+            }
+        });
     }
 }
