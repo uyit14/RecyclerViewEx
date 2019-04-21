@@ -15,17 +15,21 @@ import java.util.ArrayList;
  */
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    ArrayList<Data> data;
+    ArrayList<Data> mDatas;
     Context context;
-    private static ClickListener clickListener;
+    private OnItemClickListener listener;
 
-    public Adapter(ArrayList<Data> data, Context context) {
-        this.data = data;
+    public Adapter(ArrayList<Data> mDatas, Context context) {
+        this.mDatas = mDatas;
         this.context = context;
     }
 
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public void RemoveItem(int position){
-        data.remove(position);
+        mDatas.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -38,45 +42,39 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.txtName.setText(data.get(position).getName());
-        holder.image.setImageResource(data.get(position).getImage());
+        holder.txtName.setText(mDatas.get(position).getName());
+        holder.image.setImageResource(mDatas.get(position).getImage());
+        Data mData = mDatas.get(position);
+        holder.setOnClick(listener, mData);
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return mDatas.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtName;
         ImageView image;
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
             txtName = itemView.findViewById(R.id.txt_item);
             image = itemView.findViewById(R.id.img_item);
         }
 
-        @Override
-        public void onClick(View view) {
-            clickListener.onItemClick(getAdapterPosition(), view);
-        }
-
-
-        @Override
-        public boolean onLongClick(View view) {
-            clickListener.onItemLongClick(getAdapterPosition(), view);
-            return false;
+        public void setOnClick(final OnItemClickListener onClick, final Data data) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onClick != null) {
+                        onClick.onItemClick(data, getAdapterPosition());
+                    }
+                }
+            });
         }
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        Adapter.clickListener = clickListener;
-    }
-
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
+    public interface OnItemClickListener {
+        void onItemClick(Data data, int position);
     }
 }

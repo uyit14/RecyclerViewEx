@@ -46,16 +46,10 @@ public class MainActivity extends AppCompatActivity {
         arrayList.add(new Data(R.drawable.s8plus,"SamSung Galaxy S8 Plus"));
         Adapter adapter = new Adapter(arrayList, getApplicationContext());
         recyclerView.setAdapter(adapter);
-        //set CLick
-        adapter.setOnItemClickListener(new Adapter.ClickListener() {
+        adapter.setListener(new Adapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, View v) {
-                Log.d("uytai", arrayList.get(position).getName());
-            }
-
-            @Override
-            public void onItemLongClick(int position, View v) {
-                Log.d("uytai", arrayList.get(position).getName());
+            public void onItemClick(Data data, int position) {
+                Log.d("uytai", data.getName());
             }
         });
     }
